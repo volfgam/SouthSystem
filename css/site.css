@@ -4,3 +4,9 @@
 .m-t-15 {
     margin-top: 15px !important;
 }
+.cursor-hand {
+    cursor: pointer;
+}
+.m-r-5 {
+    margin-right: 5px;
+}
