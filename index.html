@@ -5,6 +5,7 @@
   <title>Books API Example</title>
   <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/site.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -73,6 +74,9 @@
             </p>
             <p>Published in
               <strong>{{publishedDate}}</strong>
+            </p>
+            <p>
+                <span v-bind:class="[(currentStar >= index) ? 'fa fa-star checked' : 'fa fa-star']" class="fa fa-star" v-on:click="setStar(index)" v-for="index in 5"></span>
             </p>
             <h4>Description</h4>
             <p>{{description}}</p>

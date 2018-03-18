@@ -11,7 +11,10 @@ var index = new Vue({
         description: null,
         pages: 1,
         pageSize: 5,
-        currentPage: 1
+        currentPage: 1,
+        bookId: null,
+        currentStar: null,
+
     },
     methods: {
         search: function () {
@@ -48,7 +51,8 @@ var index = new Vue({
             self.publisher = self.books[index].volumeInfo.publisher;
             self.publishedDate = self.books[index].volumeInfo.publishedDate;
             self.description = self.books[index].volumeInfo.description;
-
+            self.bookId = self.books[index].id;
+            self.getStars();
             $('#bookDetails').modal('show');
         },
         setPage: function (index) {
@@ -63,17 +67,30 @@ var index = new Vue({
             self.startIndex = self.currentPage * self.pageSize;
             self.search();
         },
-        previusPage: function() {
+        previusPage: function () {
             var self = this;
             self.currentPage -= 1;
             self.startIndex = self.currentPage * self.pageSize;
             self.search();
         },
-        newSearch: function() {
+        newSearch: function () {
             var self = this;
             self.startIndex = 1;
             self.currentPage = 1;
             self.search();
+        },
+        getStars: function () {
+            var self = this;
+            if (localStorage.getItem(self.bookId) !== "undefined") {
+                self.currentStar = localStorage.getItem(self.bookId);
+            } else {
+                self.currentStar = localStorage.getItem(self.bookId);
+            }
+        },
+        setStar: function (star) {
+            var self = this;
+            localStorage.setItem(self.bookId, star);
+            self.getStars();
         }
     },
     created: function () {
