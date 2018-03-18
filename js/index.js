@@ -8,12 +8,18 @@ var index = new Vue({
         authors: null,
         publisher: null,
         publishedDate: null,
-        description: null
+        description: null,
+        pages: 1,
+        pageSize: 5,
+        currentPage: 1
     },
     methods: {
         search: function () {
             var self = this;
-            var param = null;
+            var param = {
+                startIndex: self.startIndex,
+                maxResults: self.pageSize
+            };
             var bookName = replaceAll(self.bookName, " ", "+");
             console.log(bookName);
             $.ajax({
@@ -23,14 +29,17 @@ var index = new Vue({
                 success: function (response) {
                     //console.log(JSON.stringify(response));
                     if (response) {
-                       self.books = response.items
+                        self.books = response.items;
+                        console.log(response.items.length);
+                        console.log(response.totalItems);
+                        self.pages = Math.ceil((parseInt(response.totalItems) / parseInt(self.pageSize)));
                     }
                 },
                 dataType: "json",
                 async: true
             });
         },
-        bookDetails: function(index) {
+        bookDetails: function (index) {
             var self = this;
             console.log(index);
             self.title = self.books[index].volumeInfo.title;
@@ -39,8 +48,32 @@ var index = new Vue({
             self.publisher = self.books[index].volumeInfo.publisher;
             self.publishedDate = self.books[index].volumeInfo.publishedDate;
             self.description = self.books[index].volumeInfo.description;
-            
+
             $('#bookDetails').modal('show');
+        },
+        setPage: function (index) {
+            var self = this;
+            self.currentPage = index + 1;
+            self.startIndex = (index + 1) * self.pageSize;
+            self.search();
+        },
+        nextPage: function () {
+            var self = this;
+            self.currentPage += 1;
+            self.startIndex = self.currentPage * self.pageSize;
+            self.search();
+        },
+        previusPage: function() {
+            var self = this;
+            self.currentPage -= 1;
+            self.startIndex = self.currentPage * self.pageSize;
+            self.search();
+        },
+        newSearch: function() {
+            var self = this;
+            self.startIndex = 1;
+            self.currentPage = 1;
+            self.search();
         }
     },
     created: function () {
